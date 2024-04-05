@@ -1,0 +1,45 @@
+- name: Adicionar Headers no Nginx
+  hosts: localhost
+  become: yes
+  become_method: sudo
+
+  tasks:
+
+    - name: Fazer backup do arquivo nginx default # Primeira opcao de BKP
+      fetch:
+        src: /opt/homebrew/etc/nginx/nginx.conf # Alterar para o seu diretorio. 
+        dest: /var/tmp/
+        flat: yes
+      become: true
+
+    - name: Fazer backup do arquivo nginx default com comando cp # Segunda opcao de BKP
+      shell: cp /opt/homebrew/etc/nginx/nginx.conf /var/tmp/default_nginx_bkp
+
+    - name: Remover linhas com add_header
+      lineinfile:
+        path: /opt/homebrew/etc/nginx/nginx.conf # Alterar para o seu diretorio. 
+        state: absent
+        regexp: '^(\s*add_header\s.*;)$'
+
+    - name: Remover linhas com add_header comentadas com "#"
+      lineinfile:
+        path: /opt/homebrew/etc/nginx/nginx.conf # Alterar para o seu diretorio. 
+        state: absent
+        regexp: '^(\s*#add_header\s.*;)$'         
+
+    - name: Remover linhas em branco
+      replace:
+        path: /opt/homebrew/etc/nginx/nginx.conf # Alterar para o seu diretorio. 
+        regexp: '^\s*$'
+        replace: ''      
+
+    - name: Add Headers Nginx
+      shell: awk '/gzip_vary on;/ {print; system("cat /Users/leonanviana/Repos/LeonanViana/add_headers_nginx/headers_nginx.txt"); next} 1' /opt/homebrew/etc/nginx/nginx.conf > tmpfile && mv tmpfile /opt/homebrew/etc/nginx/nginx.conf
+
+    - name: Restart Nginx
+      service:
+        name: nginx
+        state: restarted          
+
+
+     

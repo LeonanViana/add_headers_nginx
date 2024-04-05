@@ -1,0 +1,10 @@
+        
+        add_header Strict-Transport-Security 'max-age=63072000; includeSubDomains; preload';
+        add_header Content-Security-Policy "connect-src 'self' www.google-analytics.com adservice.google.com analytics.google.com translate.googleapis.com www.google.co.ao www.google.co.in www.google.com.ar ; font-src 'self' data: fonts.gstatic.com; img-src 'self' data: static.zdassets.com unsafe c.bing.com www.google-analytics.com www.googletagmanager.com www.facebook.com lh4.googleusercontent.com www.securityscore.com.br a.slack-edge.com lh5.googleusercontent.com www.google.com www.google.com.br www.google.ca adservice.google.com lh4.googleusercontent.com www.google-analytics.com www.google.co.ao www.google.co.in www.google.co.mz www.google.com.ar www.google.pt www.googletagmanager.com www.securityscore.com.br a.slack-edge.com analytics.google.com blob: i.ytimg.com lh5.googleusercontent.com stats.g.doubleclick.net unsafe www.google.com.au www.google.com.pe www.google.st; script-src-attr 'unsafe-inline'; script-src-elem 'self' 'unsafe-inline' cdn.mxpnl.com static.zdassets.com www.google-analytics.com www.googletagmanager.com blob: ; script-src 'unsafe-eval' wasm-eval; style-src-attr 'unsafe-inline'; style-src-elem 'self' 'unsafe-inline' fonts.googleapis.com; style-src 'self' fonts.googleapis.com 'unsafe-inline'; form-action www.facebook.com; child-src www.youtube.com; default-src 'self' 'unsafe-inline' adservice.google.com analytics.google.com connect.facebook.net data: fonts.googleapis.com fonts.gstatic.com googleads.g.doubleclick.net stats.g.doubleclick.net www.facebook.com www.google.com.br www.googletagmanager.com";
+        add_header X-XSS-Protection "1; mode=block";
+        add_header X-Frame-Options DENY;
+        add_header X-Content-Type-Options nosniff;
+        add_header Referrer-Policy "strict-origin";
+	add_header Permissions-Policy "geolocation=(self),midi=(self),sync-xhr=(self),microphone=(self),camera=(self),magnetometer=(self),gyroscope=(self),fullscreen=(self),payment=(self)";
+        add_header Cache-Control "no-cache, no-store, must-revalidate";
+        
