@@ -3,15 +3,18 @@
   become: yes
   become_method: sudo
 
+
+
   vars:
-    PATH_ADD_HEADERS_TXT: /Users/leonanviana/Repos/LeonanViana/add_headers_nginx/playbooks/headers_nginx.txt
-    PATH_NGINX_CONF: /opt/homebrew/etc/nginx/nginx.conf
+    # ALTERAR PATHS CONFORME SUA NECESSIDADE
+    PATH_ADD_HEADERS_TXT: /Users/leonanviana/Repos/LeonanViana/add_headers_nginx/playbooks/headers_nginx.txt # Alterar para o seu diretorio. 
+    PATH_NGINX_CONF: /opt/homebrew/etc/nginx/nginx.conf # Alterar para o seu diretorio. 
 
   tasks:
 
     - name: Fazer backup do arquivo nginx default # Primeira opcao de BKP
       fetch:
-        src: /opt/homebrew/etc/nginx/nginx.conf # Alterar para o seu diretorio. 
+        src: /opt/homebrew/etc/nginx/nginx.conf 
         dest: /var/tmp/
         flat: yes
       become: true
@@ -21,25 +24,24 @@
 
     - name: Remover linhas com add_header
       lineinfile:
-        path: "{{ PATH_NGINX_CONF }}" # Alterar para o seu diretorio. 
+        path: "{{ PATH_NGINX_CONF }}" 
         state: absent
         regexp: '^(\s*add_header\s.*;)$'
 
     - name: Remover linhas com add_header comentadas com "#"
       lineinfile:
-        path: "{{ PATH_NGINX_CONF }}" # Alterar para o seu diretorio. 
+        path: "{{ PATH_NGINX_CONF }}" 
         state: absent
         regexp: '^(\s*#add_header\s.*;)$'         
 
     - name: Remover linhas em branco
       replace:
-        path: "{{ PATH_NGINX_CONF }}" # Alterar para o seu diretorio. 
+        path: "{{ PATH_NGINX_CONF }}" 
         regexp: '^\s*$'
         replace: ''      
 
     - name: Add Headers Nginx
       shell: awk '/gzip_vary on;/ {print; system("cat \"{{ PATH_ADD_HEADERS_TXT }}\""); next} 1' "{{ PATH_NGINX_CONF }}" > tmpfile && mv tmpfile "{{ PATH_NGINX_CONF }}"
-
 
     - name: Restart Nginx
       service:
