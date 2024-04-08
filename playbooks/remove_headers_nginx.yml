@@ -4,8 +4,8 @@
   become_method: sudo
 
   vars:
-    PATH_PLAYBOOK: /Users/leonanviana/Repos/LeonanViana/add_headers_nginx/playbooks
-    PATH_NGINX_CONF: /opt/homebrew/etc/nginx/nginx.conf
+    PATH_PLAYBOOK: /Users/leonanviana/Repos/LeonanViana/add_headers_nginx/playbooks # Alterar para o seu diretorio. 
+    PATH_NGINX_CONF: /opt/homebrew/etc/nginx/nginx.conf # Alterar para o seu diretorio. 
 
   tasks:
 
@@ -21,26 +21,26 @@
 
     - name: Remover linhas com add_header
       lineinfile:
-        path: "{{ PATH_NGINX_CONF }}" # Alterar para o seu diretorio. 
+        path: "{{ PATH_NGINX_CONF }}" 
         state: absent
         regexp: '^(\s*add_header\s.*;)$'
 
     - name: Remover linhas com add_header comentadas com "#"
       lineinfile:
-        path: "{{ PATH_NGINX_CONF }}" # Alterar para o seu diretorio. 
+        path: "{{ PATH_NGINX_CONF }}" 
         state: absent
         regexp: '^(\s*#add_header\s.*;)$'         
 
     - name: Remover linhas em branco
       replace:
-        path: "{{ PATH_NGINX_CONF }}" # Alterar para o seu diretorio. 
+        path: "{{ PATH_NGINX_CONF }}" 
         regexp: '^\s*$'
         replace: ''      
 
-    - name: Restart Nginx
-      service:
-        name: nginx
-        state: restarted          
+    #- name: Restart Nginx
+    #  service:
+    #    name: nginx
+    #    state: restarted          
 
 
      

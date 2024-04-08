@@ -41,10 +41,10 @@
     - name: Add Headers Nginx
       shell: awk '/gzip_vary on;/ {print; system("cat \"{{ PATH_ADD_HEADERS_TXT }}\""); next} 1' "{{ PATH_NGINX_CONF }}" > tmpfile && mv tmpfile "{{ PATH_NGINX_CONF }}"
 
-    - name: Restart Nginx
-      service:
-        name: nginx
-        state: restarted          
+    #- name: Restart Nginx
+    #  service:
+    #    name: nginx
+    #    state: restarted          
 
 
      
