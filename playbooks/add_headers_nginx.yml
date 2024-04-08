@@ -3,6 +3,10 @@
   become: yes
   become_method: sudo
 
+  vars:
+    PATH_ADD_HEADERS_TXT: /Users/leonanviana/Repos/LeonanViana/add_headers_nginx/playbooks/headers_nginx.txt
+    PATH_NGINX_CONF: /opt/homebrew/etc/nginx/nginx.conf
+
   tasks:
 
     - name: Fazer backup do arquivo nginx default # Primeira opcao de BKP
@@ -13,28 +17,29 @@
       become: true
 
     - name: Fazer backup do arquivo nginx default com comando cp # Segunda opcao de BKP
-      shell: cp /opt/homebrew/etc/nginx/nginx.conf /var/tmp/default_nginx_bkp
+      shell: cp "{{ PATH_NGINX_CONF }}" /var/tmp/default_nginx_bkp
 
     - name: Remover linhas com add_header
       lineinfile:
-        path: /opt/homebrew/etc/nginx/nginx.conf # Alterar para o seu diretorio. 
+        path: "{{ PATH_NGINX_CONF }}" # Alterar para o seu diretorio. 
         state: absent
         regexp: '^(\s*add_header\s.*;)$'
 
     - name: Remover linhas com add_header comentadas com "#"
       lineinfile:
-        path: /opt/homebrew/etc/nginx/nginx.conf # Alterar para o seu diretorio. 
+        path: "{{ PATH_NGINX_CONF }}" # Alterar para o seu diretorio. 
         state: absent
         regexp: '^(\s*#add_header\s.*;)$'         
 
     - name: Remover linhas em branco
       replace:
-        path: /opt/homebrew/etc/nginx/nginx.conf # Alterar para o seu diretorio. 
+        path: "{{ PATH_NGINX_CONF }}" # Alterar para o seu diretorio. 
         regexp: '^\s*$'
         replace: ''      
 
     - name: Add Headers Nginx
-      shell: awk '/gzip_vary on;/ {print; system("cat /Users/leonanviana/Repos/LeonanViana/add_headers_nginx/headers_nginx.txt"); next} 1' /opt/homebrew/etc/nginx/nginx.conf > tmpfile && mv tmpfile /opt/homebrew/etc/nginx/nginx.conf
+      shell: awk '/gzip_vary on;/ {print; system("cat \"{{ PATH_ADD_HEADERS_TXT }}\""); next} 1' "{{ PATH_NGINX_CONF }}" > tmpfile && mv tmpfile "{{ PATH_NGINX_CONF }}"
+
 
     - name: Restart Nginx
       service:

@@ -1,0 +1,46 @@
+- name: Adicionar Headers no Nginx
+  hosts: localhost
+  become: yes
+  become_method: sudo
+
+  vars:
+    PATH_PLAYBOOK: /Users/leonanviana/Repos/LeonanViana/add_headers_nginx/playbooks
+    PATH_NGINX_CONF: /opt/homebrew/etc/nginx/nginx.conf
+
+  tasks:
+
+    - name: Fazer backup do arquivo nginx default # Primeira opcao de BKP
+      fetch:
+        src: "{{ PATH_NGINX_CONF }}" # Alterar para o seu diretorio. 
+        dest: /var/tmp/
+        flat: yes
+      become: true
+
+    - name: Fazer backup do arquivo nginx default com comando cp # Segunda opcao de BKP
+      shell: cp "{{ PATH_NGINX_CONF }}" /var/tmp/default_nginx_bkp
+
+    - name: Remover linhas com add_header
+      lineinfile:
+        path: "{{ PATH_NGINX_CONF }}" # Alterar para o seu diretorio. 
+        state: absent
+        regexp: '^(\s*add_header\s.*;)$'
+
+    - name: Remover linhas com add_header comentadas com "#"
+      lineinfile:
+        path: "{{ PATH_NGINX_CONF }}" # Alterar para o seu diretorio. 
+        state: absent
+        regexp: '^(\s*#add_header\s.*;)$'         
+
+    - name: Remover linhas em branco
+      replace:
+        path: "{{ PATH_NGINX_CONF }}" # Alterar para o seu diretorio. 
+        regexp: '^\s*$'
+        replace: ''      
+
+    - name: Restart Nginx
+      service:
+        name: nginx
+        state: restarted          
+
+
+     
