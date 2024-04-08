@@ -3,8 +3,6 @@
   become: yes
   become_method: sudo
 
-
-
   vars:
     # ALTERAR PATHS CONFORME SUA NECESSIDADE
     PATH_ADD_HEADERS_TXT: /Users/leonanviana/Repos/LeonanViana/add_headers_nginx/playbooks/headers_nginx.txt # Alterar para o seu diretorio. 
